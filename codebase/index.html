@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Vlearn Focus Tutor — prototype CP2">
+  <title>Vlearn Focus Tutor · CP2 Mock</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Vlearn">
+      <span class="brand-mark">V</span>
+      <span>Vlearn</span>
+    </a>
+    <div class="course">
+      <span class="eyebrow">AI IN ACTION · DAY 1</span>
+      <strong>AI &amp; LLM Foundation</strong>
+    </div>
+    <div class="progress" aria-label="Tiến độ bài học">
+      <span>12 / 29</span>
+      <span class="progress-track"><span></span></span>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="lesson" aria-label="Nội dung slide">
+      <nav class="lesson-toolbar">
+        <button class="icon-button" type="button" aria-label="Trang trước">←</button>
+        <span>Trang 12</span>
+        <button class="icon-button" type="button" aria-label="Trang sau">→</button>
+        <span class="toolbar-spacer"></span>
+        <button class="ghost-button" type="button" id="resetButton">Đặt lại demo</button>
+      </nav>
+
+      <article class="slide-card">
+        <div class="slide-number">12</div>
+        <p class="slide-kicker">BÊN TRONG LLM</p>
+        <h1>Sinh văn bản = đoán → nối vào câu → đoán tiếp</h1>
+        <p class="slide-lead">
+          Mỗi token mới được nối vào ngữ cảnh, rồi model chạy lại từ đầu —
+          vòng lặp <strong>predict → append → rerun</strong>.
+        </p>
+        <div class="token-flow" aria-label="Minh hoạ dự đoán token">
+          <div><small>NGỮ CẢNH</small><span>Một tách</span></div>
+          <b>→</b>
+          <div class="probabilities">
+            <small>PHÂN BỐ XÁC SUẤT</small>
+            <span><i style="--w: 78%"></i>cà phê <em>78%</em></span>
+            <span><i style="--w: 14%"></i>trà <em>14%</em></span>
+            <span><i style="--w: 8%"></i>mưa <em>8%</em></span>
+          </div>
+          <b>→</b>
+          <div><small>TOKEN TIẾP</small><span class="token">cà phê</span></div>
+        </div>
+        <button class="selection" id="selection" type="button" aria-pressed="false">
+          <span>“Mỗi token mới được nối vào ngữ cảnh, rồi model chạy lại từ đầu”</span>
+          <small>Nhấn để hỏi tutor về đoạn này</small>
+        </button>
+      </article>
+
+      <aside class="tip">
+        <span>✦</span>
+        <p><strong>Mẹo học nhanh</strong>Chọn đúng đoạn chưa hiểu để tutor chỉ dùng ngữ cảnh của trang này.</p>
+      </aside>
+    </section>
+
+    <aside class="tutor" aria-label="AI tutor">
+      <div class="tutor-header">
+        <div>
+          <span class="tutor-avatar">✦</span>
+          <div><strong>Focus Tutor</strong><small>Chỉ giải thích từ tài liệu khóa học</small></div>
+        </div>
+        <span class="status"><i></i> Sẵn sàng</span>
+      </div>
+
+      <div class="messages" id="messages" aria-live="polite">
+        <section class="welcome" id="welcome">
+          <span class="welcome-icon">✦</span>
+          <h2>Bạn đang vướng chỗ nào?</h2>
+          <p>Chọn một đoạn trên slide. Mình sẽ giải thích ngắn gọn và chỉ rõ căn cứ để bạn tự kiểm.</p>
+          <div class="scope-note">
+            <strong>Phạm vi của mình</strong>
+            <span>✓ Nội dung trong slide và transcript bài học</span>
+            <span>— Ngoài tài liệu, mình sẽ nói rõ là không có căn cứ</span>
+          </div>
+        </section>
+      </div>
+
+      <form class="composer" id="composer">
+        <div class="context-chip" id="contextChip" hidden>
+          <span><b>Đang hỏi về · Trang 12</b><small id="contextText"></small></span>
+          <button type="button" id="clearContext" aria-label="Bỏ đoạn đã chọn">×</button>
+        </div>
+        <div class="suggestions" id="suggestions" hidden>
+          <button type="button" data-question="Giải thích đoạn này dễ hiểu hơn">Giải thích dễ hiểu</button>
+          <button type="button" data-question="Cho mình một ví dụ cụ thể">Cho ví dụ</button>
+          <button type="button" data-question="Kiểm tra xem mình đã hiểu đúng chưa">Kiểm tra hiểu bài</button>
+        </div>
+        <label class="input-row">
+          <span class="sr-only">Câu hỏi cho tutor</span>
+          <textarea id="question" rows="1" placeholder="Chọn một đoạn trên slide để bắt đầu…" disabled></textarea>
+          <button id="sendButton" type="submit" disabled aria-label="Gửi câu hỏi">↑</button>
+        </label>
+        <small class="mock-label">CP2 MOCK · Câu trả lời đang dùng dữ liệu giả, chưa gọi AI thật</small>
+      </form>
+    </aside>
+  </main>
+
+  <dialog id="citationDialog">
+    <button class="dialog-close" id="closeDialog" type="button" aria-label="Đóng">×</button>
+    <span class="citation-label">CĂN CỨ · TRANG 12</span>
+    <h2>Đoạn gốc trong slide</h2>
+    <blockquote>“Mỗi token mới được nối vào ngữ cảnh, rồi model chạy lại từ đầu — vòng lặp predict → append → rerun.”</blockquote>
+    <p>Câu giải thích của tutor chỉ được phép diễn giải các ý có thể đối chiếu với đoạn này.</p>
+    <button class="primary-button" id="backToChat" type="button">Quay lại câu trả lời</button>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
