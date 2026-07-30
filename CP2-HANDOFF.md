@@ -43,11 +43,12 @@ Tín hiệu mining ban đầu trên 1.261 message của học viên:
 
 Các trạng thái đã dựng:
 
-1. **Trước khi chọn:** ô hỏi bị khóa để tránh câu hỏi mất ngữ cảnh.
-2. **Đã chọn:** nút hỏi xuất hiện cạnh vùng bôi đen, giống thao tác đọc tài liệu thực tế.
-3. **Đang trả lời:** trạng thái chờ ngắn.
-4. **Có kết quả:** giải thích ngắn, nhãn căn cứ, liên kết tới slide trang 12 và transcript `[T04-047]`, feedback.
-5. **Correction:** người học có thể bỏ output và chọn lại đoạn.
+1. **Nguồn học:** web dùng ảnh 1920×1080 xuất trực tiếp từ trang 12 của `d1-slide-hackathon.pdf`; không tự vẽ lại slide nên giữ đúng font, bố cục, watermark và nội dung nguồn.
+2. **Trước khi chọn:** ô hỏi bị khóa để tránh câu hỏi mất ngữ cảnh.
+3. **Đã chọn:** khay dưới PDF mô phỏng đoạn bôi đen và hiện nút hỏi.
+4. **Đang trả lời:** trạng thái chờ ngắn.
+5. **Có kết quả:** giải thích ngắn, nhãn căn cứ, liên kết tới slide trang 12 và transcript `[T04-047]`, feedback.
+6. **Correction:** người học có thể bỏ output và chọn lại đoạn.
 
 ## 5. Automation và cost-of-error
 

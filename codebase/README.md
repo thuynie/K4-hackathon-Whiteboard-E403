@@ -21,8 +21,8 @@ Flow trên đi hết được không cần can thiệp tay giữa chừng.
 ## Phạm vi CP2
 
 - Mức hiện tại: **Mock**.
-- Thật: giao diện đọc bài, danh sách trang, trạng thái chọn đoạn, nút hỏi tại vùng chọn, panel tutor, mở căn cứ, feedback và correction.
-- Mock: slide minh họa, câu trả lời tutor, nhãn confidence và trích dẫn.
+- Thật: giao diện web; ảnh trang 12 được xuất nguyên vẹn từ `data/vlearn-pack/slides/d1-slide-hackathon.pdf` để giữ đúng font, bố cục và nội dung; trạng thái chọn đoạn, nút hỏi, panel tutor, mở căn cứ, feedback và correction.
+- Mock: thao tác bôi đen được mô phỏng bằng khay “Đoạn được chọn”; câu trả lời tutor, confidence và retrieval.
 - Chưa có API/LLM thật. Đây là yêu cầu của CP3, không được tính là đã hoàn thành ở CP2.
 
 ## Lát cắt đang thể hiện
