@@ -1,9 +1,9 @@
 const selection = document.querySelector("#selection");
+const askSelection = document.querySelector("#askSelection");
 const contextChip = document.querySelector("#contextChip");
 const contextText = document.querySelector("#contextText");
 const clearContext = document.querySelector("#clearContext");
 const suggestions = document.querySelector("#suggestions");
-const demoCases = document.querySelector("#demoCases");
 const question = document.querySelector("#question");
 const sendButton = document.querySelector("#sendButton");
 const composer = document.querySelector("#composer");
@@ -14,15 +14,15 @@ const citationDialog = document.querySelector("#citationDialog");
 const closeDialog = document.querySelector("#closeDialog");
 const backToChat = document.querySelector("#backToChat");
 
-const selectedExcerpt = "Mỗi token mới được nối vào ngữ cảnh, rồi model chạy lại từ đầu";
+const selectedExcerpt = "Mỗi token mới được nối vào ngữ cảnh, rồi model chạy lại từ đầu — vòng lặp predict → append → rerun.";
 let hasContext = false;
 
 function setContext(enabled) {
   hasContext = enabled;
   selection.setAttribute("aria-pressed", String(enabled));
+  askSelection.hidden = true;
   contextChip.hidden = !enabled;
   suggestions.hidden = !enabled;
-  demoCases.hidden = !enabled;
   question.disabled = !enabled;
   sendButton.disabled = !enabled;
   question.placeholder = enabled
@@ -122,7 +122,7 @@ function addTutorAnswer(text) {
     <p>${answer.body}</p>
     <p class="analogy">${answer.analogy}</p>
     ${isHappy ? `<button class="citation-button" type="button">
-      <span>↗ Xem căn cứ trên slide</span><span>Trang 12</span>
+      <span>↗ Kiểm tra 2 căn cứ</span><span>Trang 12 · T04-047</span>
     </button>` : ""}
     ${actions}
     ${isHappy ? `<div class="feedback">
@@ -159,13 +159,13 @@ function submitQuestion(text) {
   }, 650);
 }
 
-selection.addEventListener("click", () => setContext(true));
+selection.addEventListener("click", () => {
+  selection.setAttribute("aria-pressed", "true");
+  askSelection.hidden = false;
+});
+askSelection.addEventListener("click", () => setContext(true));
 clearContext.addEventListener("click", () => setContext(false));
 suggestions.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-question]");
-  if (button) submitQuestion(button.dataset.question);
-});
-demoCases.addEventListener("click", (event) => {
   const button = event.target.closest("[data-question]");
   if (button) submitQuestion(button.dataset.question);
 });

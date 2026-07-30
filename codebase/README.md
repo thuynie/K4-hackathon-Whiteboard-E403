@@ -9,18 +9,19 @@ Không cần cài dependency:
 
 ## Flow cần show tại CP2
 
-1. Nhấn đoạn được tô ở cuối slide 12.
-2. Chọn `Giải thích dễ hiểu`, `Cho ví dụ`, hoặc tự nhập câu hỏi.
-3. Đọc câu trả lời và nhấn `Xem căn cứ trên slide`.
-4. Mở `Thử các đường đi rủi ro` và chạy lần lượt case mơ hồ, không có căn cứ, ngoài phạm vi.
-5. Đóng căn cứ, sau đó thử `Không đúng ý mình → chọn lại đoạn`.
+1. Nhấn vào đoạn văn trên slide để mô phỏng thao tác bôi đen.
+2. Nhấn nút nổi `Hỏi tutor về đoạn này`.
+3. Chọn `Giải thích dễ hiểu`, `Cho ví dụ`, hoặc tự nhập câu hỏi.
+4. Đọc câu trả lời và nhấn `Kiểm tra 2 căn cứ`.
+5. Đối chiếu slide trang 12 và transcript `[T04-047]`.
+6. Đóng căn cứ, sau đó thử `Không đúng ý mình → chọn lại đoạn`.
 
 Flow trên đi hết được không cần can thiệp tay giữa chừng.
 
 ## Phạm vi CP2
 
 - Mức hiện tại: **Mock**.
-- Thật: giao diện, trạng thái chọn đoạn, bốn đường đi trải nghiệm, mở căn cứ, feedback và correction.
+- Thật: giao diện đọc bài, danh sách trang, trạng thái chọn đoạn, nút hỏi tại vùng chọn, panel tutor, mở căn cứ, feedback và correction.
 - Mock: slide minh họa, câu trả lời tutor, nhãn confidence và trích dẫn.
 - Chưa có API/LLM thật. Đây là yêu cầu của CP3, không được tính là đã hoàn thành ở CP2.
 
@@ -40,11 +41,11 @@ Flow trên đi hết được không cần can thiệp tay giữa chừng.
 | Đường đi | Cách kích hoạt | Hành vi |
 |---|---|---|
 | Happy path | `Giải thích dễ hiểu` | Trả lời ngắn + căn cứ trang 12 |
-| Low-confidence | `② Câu hỏi mơ hồ` | Hỏi lại, đưa hai lựa chọn, không đoán |
-| Failure | `① Không có căn cứ` | Nói rõ thiếu căn cứ + chuyển TA |
+| Low-confidence | Nhập `Cái này hoạt động như thế nào?` | Hỏi lại, đưa hai lựa chọn, không đoán |
+| Failure | Hỏi về dự đoán giá cổ phiếu | Nói rõ thiếu căn cứ + chuyển TA |
 | Correction | `Không đúng ý mình` | Bỏ ngữ cảnh và cho chọn lại |
 
-Case `③ Ngoài phạm vi` chứng minh tutor không làm bài kiểm tra thay học viên.
+Nhập yêu cầu “viết đáp án bài kiểm tra” để kiểm tra nhánh ngoài phạm vi.
 
 ## Ghi chú dữ liệu
 

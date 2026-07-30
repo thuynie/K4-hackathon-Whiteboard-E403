@@ -39,14 +39,14 @@ Tín hiệu mining ban đầu trên 1.261 message của học viên:
 
 ## 4. Flow chính có thể bấm
 
-`Chọn đoạn trên slide → nhận chip ngữ cảnh → đặt câu hỏi → nhận giải thích → mở căn cứ trang 12 → quay lại → feedback hoặc chọn lại đoạn`.
+`Bôi đen đoạn trên slide → nút “Hỏi tutor” xuất hiện tại vùng chọn → nhận chip ngữ cảnh → đặt câu hỏi → nhận giải thích → đối chiếu slide + transcript → feedback hoặc chọn lại đoạn`.
 
 Các trạng thái đã dựng:
 
 1. **Trước khi chọn:** ô hỏi bị khóa để tránh câu hỏi mất ngữ cảnh.
-2. **Đã chọn:** hiện đoạn và ba câu hỏi nhanh.
+2. **Đã chọn:** nút hỏi xuất hiện cạnh vùng bôi đen, giống thao tác đọc tài liệu thực tế.
 3. **Đang trả lời:** trạng thái chờ ngắn.
-4. **Có kết quả:** giải thích ngắn, nhãn căn cứ, trích dẫn, feedback.
+4. **Có kết quả:** giải thích ngắn, nhãn căn cứ, liên kết tới slide trang 12 và transcript `[T04-047]`, feedback.
 5. **Correction:** người học có thể bỏ output và chọn lại đoạn.
 
 ## 5. Automation và cost-of-error
@@ -63,9 +63,9 @@ Lý do: giải thích sai khiến học viên học sai kiến thức và mất 
 
 | Đường đi | Cách kích hoạt trong prototype | Hành vi đã thể hiện |
 |---|---|---|
-| Happy path | `Giải thích dễ hiểu` | Trả lời ngắn, nhãn căn cứ, mở được trang 12 |
-| Low-confidence | `② Câu hỏi mơ hồ` | Không đoán “cái này”; hỏi lại bằng hai lựa chọn |
-| Failure/không căn cứ | `① Không có căn cứ` | Nói rõ slide không chứa kết luận và cho chuyển TA |
+| Happy path | Bôi đoạn → `Hỏi tutor` → `Giải thích dễ hiểu` | Trả lời ngắn, kiểm tra được slide 12 và `[T04-047]` |
+| Low-confidence | Nhập `Cái này hoạt động như thế nào?` | Không đoán “cái này”; hỏi lại bằng hai lựa chọn |
+| Failure/không căn cứ | Hỏi mô hình dự đoán giá cổ phiếu | Nói rõ tài liệu không chứa kết luận và cho chuyển TA |
 | Correction | `Không đúng ý mình → chọn lại đoạn` | Bỏ ngữ cảnh cũ, đưa người học về bước chọn đoạn |
 
 Ngoài ra, case `③ Ngoài phạm vi` từ chối làm bài kiểm tra thay nhưng vẫn đề nghị giải thích hoặc tự kiểm tra kiến thức.
@@ -74,10 +74,10 @@ Ngoài ra, case `③ Ngoài phạm vi` từ chối làm bài kiểm tra thay nh�
 
 1. Mở `codebase/index.html`, chỉ vào nhãn `CP2 MOCK`.
 2. Nói pain trong một câu.
-3. Bấm đoạn được tô trên slide 12.
-4. Bấm `Giải thích dễ hiểu`.
-5. Bấm `Xem căn cứ trên slide` để chứng minh trust không dựa vào lời hứa.
-6. Mở `Thử các đường đi rủi ro`, bấm case mơ hồ và không có căn cứ.
+3. Nhấn vào đoạn văn để mô phỏng bôi đen; chỉ ra nút hỏi xuất hiện tại vùng chọn.
+4. Bấm `Hỏi tutor về đoạn này`, rồi bấm `Giải thích dễ hiểu`.
+5. Bấm `Kiểm tra 2 căn cứ` để đối chiếu slide 12 và transcript `[T04-047]`.
+6. Nhập tự nhiên câu mơ hồ hoặc câu không có trong tài liệu để show graceful failure.
 7. Bấm `Không đúng ý mình → chọn lại đoạn`.
 8. Kết luận: bốn đường đi đã bấm hết; retrieval/AI thật và đo chất lượng là CP3.
 
