@@ -59,14 +59,16 @@ Chọn **Conditional automation**:
 
 Lý do: giải thích sai khiến học viên học sai kiến thức và mất niềm tin; chi phí sửa không chỉ là sửa một câu trả lời mà còn phải phát hiện người học đã hiểu sai ở đâu. Vì vậy không chọn Automate hoàn toàn.
 
-## 6. Bốn đường đi cần tiếp tục hoàn thiện
+## 6. Bốn đường đi đã bấm được trong CP2
 
-| Đường đi | CP2 đã thể hiện | Hành vi mục tiêu ở bản sau |
+| Đường đi | Cách kích hoạt trong prototype | Hành vi đã thể hiện |
 |---|---|---|
-| Happy path | Chọn đoạn → giải thích → mở căn cứ | Giải thích từ retrieval thật |
-| Low-confidence | Cơ chế khóa input khi chưa có ngữ cảnh | Hỏi lại đúng một câu, không đoán |
-| Failure/không căn cứ | Lời hứa phạm vi trên màn hình chào | Báo “không tìm thấy căn cứ” + chuyển TA |
-| Correction | “Không đúng ý mình → chọn lại đoạn” | Giữ feedback và cho sửa câu hỏi |
+| Happy path | `Giải thích dễ hiểu` | Trả lời ngắn, nhãn căn cứ, mở được trang 12 |
+| Low-confidence | `② Câu hỏi mơ hồ` | Không đoán “cái này”; hỏi lại bằng hai lựa chọn |
+| Failure/không căn cứ | `① Không có căn cứ` | Nói rõ slide không chứa kết luận và cho chuyển TA |
+| Correction | `Không đúng ý mình → chọn lại đoạn` | Bỏ ngữ cảnh cũ, đưa người học về bước chọn đoạn |
+
+Ngoài ra, case `③ Ngoài phạm vi` từ chối làm bài kiểm tra thay nhưng vẫn đề nghị giải thích hoặc tự kiểm tra kiến thức.
 
 ## 7. Kịch bản demo 2 phút
 
@@ -75,8 +77,9 @@ Lý do: giải thích sai khiến học viên học sai kiến thức và mất 
 3. Bấm đoạn được tô trên slide 12.
 4. Bấm `Giải thích dễ hiểu`.
 5. Bấm `Xem căn cứ trên slide` để chứng minh trust không dựa vào lời hứa.
-6. Quay lại và bấm `Không đúng ý mình → chọn lại đoạn`.
-7. Kết luận: flow đã bấm hết; AI thật và đo chất lượng là CP3.
+6. Mở `Thử các đường đi rủi ro`, bấm case mơ hồ và không có căn cứ.
+7. Bấm `Không đúng ý mình → chọn lại đoạn`.
+8. Kết luận: bốn đường đi đã bấm hết; retrieval/AI thật và đo chất lượng là CP3.
 
 ## 8. Checklist trước khi nộp
 
@@ -86,4 +89,5 @@ Lý do: giải thích sai khiến học viên học sai kiến thức và mất 
 - [x] Không có API key.
 - [x] Không commit nguyên data pack vào phần prototype.
 - [ ] Nhóm điền thành viên và phân công có tên trong README chính.
-- [ ] Nhóm tạo commit CP2 và nộp đúng giờ của khóa.
+- [x] Có commit CP2 trong repo.
+- [ ] Mỗi thành viên nộp cùng link repo đúng giờ của khóa.

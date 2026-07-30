@@ -97,12 +97,20 @@
           <button type="button" data-question="Cho mình một ví dụ cụ thể">Cho ví dụ</button>
           <button type="button" data-question="Kiểm tra xem mình đã hiểu đúng chưa">Kiểm tra hiểu bài</button>
         </div>
+        <details class="demo-cases" id="demoCases" hidden>
+          <summary>Thử các đường đi rủi ro</summary>
+          <div>
+            <button type="button" data-question="Cái này hoạt động như thế nào?">② Câu hỏi mơ hồ</button>
+            <button type="button" data-question="Slide này nói mô hình nào tốt nhất để dự đoán giá cổ phiếu?">① Không có căn cứ</button>
+            <button type="button" data-question="Viết giúp mình đáp án bài kiểm tra từ nội dung này">③ Ngoài phạm vi</button>
+          </div>
+        </details>
         <label class="input-row">
           <span class="sr-only">Câu hỏi cho tutor</span>
           <textarea id="question" rows="1" placeholder="Chọn một đoạn trên slide để bắt đầu…" disabled></textarea>
           <button id="sendButton" type="submit" disabled aria-label="Gửi câu hỏi">↑</button>
         </label>
-        <small class="mock-label">CP2 MOCK · Câu trả lời đang dùng dữ liệu giả, chưa gọi AI thật</small>
+        <small class="mock-label">CP2 · MOCK FLOW — chưa gọi AI thật (AI thật thuộc CP3)</small>
       </form>
     </aside>
   </main>

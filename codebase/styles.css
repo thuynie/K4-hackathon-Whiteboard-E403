@@ -114,6 +114,12 @@ button { cursor: pointer; }
 .feedback button { border: 0; border-radius: 7px; padding: 5px 8px; background: #efeee8; }
 .correction { margin-top: 9px; padding-top: 10px; border-top: 1px solid var(--line); }
 .correction button { border: 0; padding: 0; color: var(--green-2); background: none; font-size: 11px; font-weight: 800; }
+.message.risk { border-color: #e5d1b8; background: #fffdf8; }
+.message.risk .confidence { color: #9a602d; }
+.message.failure { border-color: #e1c5c5; background: #fffafa; }
+.message.failure .confidence { color: #a34a4a; }
+.next-actions { display: grid; gap: 7px; margin-top: 12px; }
+.next-actions button { padding: 9px 10px; border: 1px solid var(--line); border-radius: 9px; color: var(--green); background: var(--white); text-align: left; font-size: 11px; font-weight: 800; }
 .typing { display: flex; gap: 5px; padding: 13px; }
 .typing i { width: 6px; height: 6px; border-radius: 50%; background: #8d9891; animation: pulse 1s infinite alternate; }
 .typing i:nth-child(2) { animation-delay: .2s; }
@@ -126,6 +132,10 @@ button { cursor: pointer; }
 .context-chip button { border: 0; color: var(--muted); background: none; font-size: 19px; }
 .suggestions { display: flex; gap: 6px; margin-bottom: 9px; overflow-x: auto; }
 .suggestions button { flex: none; padding: 7px 9px; border: 1px solid var(--line); border-radius: 20px; color: var(--green); background: var(--white); font-size: 10px; font-weight: 750; }
+.demo-cases { margin: 0 0 9px; padding: 8px 10px; border: 1px dashed #c7cdc7; border-radius: 10px; background: #f4f3ed; }
+.demo-cases summary { color: var(--muted); cursor: pointer; font-size: 10px; font-weight: 800; }
+.demo-cases div { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.demo-cases button { padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; color: #5d4633; background: var(--white); font-size: 9px; font-weight: 750; }
 .input-row { display: flex; align-items: end; gap: 9px; padding: 7px 7px 7px 12px; border: 1px solid var(--line); border-radius: 13px; background: var(--white); }
 textarea { width: 100%; min-height: 30px; max-height: 100px; resize: none; border: 0; outline: 0; color: var(--ink); background: transparent; font-size: 13px; line-height: 1.45; }
 textarea::placeholder { color: #9ca49f; }

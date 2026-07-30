@@ -3,6 +3,7 @@ const contextChip = document.querySelector("#contextChip");
 const contextText = document.querySelector("#contextText");
 const clearContext = document.querySelector("#clearContext");
 const suggestions = document.querySelector("#suggestions");
+const demoCases = document.querySelector("#demoCases");
 const question = document.querySelector("#question");
 const sendButton = document.querySelector("#sendButton");
 const composer = document.querySelector("#composer");
@@ -21,6 +22,7 @@ function setContext(enabled) {
   selection.setAttribute("aria-pressed", String(enabled));
   contextChip.hidden = !enabled;
   suggestions.hidden = !enabled;
+  demoCases.hidden = !enabled;
   question.disabled = !enabled;
   sendButton.disabled = !enabled;
   question.placeholder = enabled
@@ -51,8 +53,36 @@ function addTyping() {
 
 function answerFor(text) {
   const normalized = text.toLowerCase();
+  if (normalized.includes("hoạt động như thế nào")) {
+    return {
+      type: "low",
+      title: "Mình cần bạn làm rõ một ý",
+      body: "“Cái này” có thể là việc model chọn token theo xác suất, hoặc vòng lặp nối token rồi chạy lại. Bạn muốn làm rõ phần nào?",
+      analogy: "Mình chưa giải thích ngay để tránh đoán sai ý bạn.",
+      actions: ["Cách model chọn token", "Vòng lặp predict → append → rerun"]
+    };
+  }
+  if (normalized.includes("cổ phiếu")) {
+    return {
+      type: "failure",
+      title: "Mình không tìm thấy căn cứ trong trang này",
+      body: "Trang 12 chỉ mô tả cách LLM dự đoán token tiếp theo, không kết luận mô hình nào tốt nhất để dự đoán giá cổ phiếu.",
+      analogy: "Mình sẽ không suy đoán thêm ngoài nội dung tài liệu.",
+      actions: ["Hỏi lại về cơ chế dự đoán token", "Gửi câu này cho TA"]
+    };
+  }
+  if (normalized.includes("đáp án bài kiểm tra")) {
+    return {
+      type: "failure",
+      title: "Mình không thể làm bài kiểm tra thay bạn",
+      body: "Mình có thể giải thích khái niệm hoặc đặt một câu hỏi để bạn tự kiểm tra mức hiểu, nhưng không tạo đáp án nộp thay.",
+      analogy: "Phạm vi của tutor là hỗ trợ học đúng nội dung, không thay người học hoàn thành bài đánh giá.",
+      actions: ["Giải thích lại khái niệm", "Cho mình một câu tự kiểm tra"]
+    };
+  }
   if (normalized.includes("kiểm tra")) {
     return {
+      type: "happy",
       title: "Thử kiểm tra bằng một câu ngắn",
       body: "Sau khi model chọn được một token mới, điều gì xảy ra trước khi nó dự đoán token kế tiếp?",
       analogy: "Gợi ý: hãy nhìn lại ba bước predict → append → rerun trên slide."
@@ -60,12 +90,14 @@ function answerFor(text) {
   }
   if (normalized.includes("ví dụ")) {
     return {
+      type: "happy",
       title: "Ví dụ với câu “Một tách…”",
       body: "Model chấm xác suất cho nhiều token có thể đứng tiếp theo. Nếu chọn “cà phê”, nó nối token này vào câu thành “Một tách cà phê”, rồi dùng toàn bộ câu mới làm ngữ cảnh cho lần dự đoán tiếp theo.",
       analogy: "Điểm cần nhớ: model không viết cả câu một lần; nó lặp lại việc chọn từng mảnh nhỏ."
     };
   }
   return {
+    type: "happy",
     title: "Hiểu đơn giản trong 20 giây",
     body: "LLM viết từng token một. Mỗi lần chọn xong một token, nó gắn token đó vào phần đã có rồi đọc lại ngữ cảnh mới để đoán token kế tiếp. Chu trình này lặp đến khi câu trả lời hoàn tất.",
     analogy: "Giống như nối một đoàn tàu: thêm một toa, nhìn lại cả đoàn hiện tại, rồi mới quyết định toa tiếp theo."
@@ -74,29 +106,38 @@ function answerFor(text) {
 
 function addTutorAnswer(text) {
   const answer = answerFor(text);
+  const isHappy = answer.type === "happy";
+  const status = isHappy ? "● Căn cứ rõ" : answer.type === "low" ? "● Chưa đủ rõ" : "● Không có căn cứ";
+  const actions = answer.actions
+    ? `<div class="next-actions">${answer.actions.map((action) => `<button type="button">${action}</button>`).join("")}</div>`
+    : "";
   const node = document.createElement("section");
-  node.className = "message tutor-answer";
+  node.className = `message tutor-answer ${answer.type === "low" ? "risk" : answer.type === "failure" ? "failure" : ""}`;
   node.innerHTML = `
     <div class="answer-meta">
       <span>FOCUS TUTOR · TRANG 12</span>
-      <span class="confidence">● Căn cứ rõ</span>
+      <span class="confidence">${status}</span>
     </div>
     <h3>${answer.title}</h3>
     <p>${answer.body}</p>
     <p class="analogy">${answer.analogy}</p>
-    <button class="citation-button" type="button">
+    ${isHappy ? `<button class="citation-button" type="button">
       <span>↗ Xem căn cứ trên slide</span><span>Trang 12</span>
-    </button>
-    <div class="feedback">
+    </button>` : ""}
+    ${actions}
+    ${isHappy ? `<div class="feedback">
       <span>Giải thích này có đúng chỗ bạn hỏi?</span>
       <button type="button" aria-label="Hữu ích">👍</button>
       <button type="button" aria-label="Chưa hữu ích">👎</button>
-    </div>
+    </div>` : ""}
     <div class="correction">
       <button type="button">Không đúng ý mình → chọn lại đoạn</button>
     </div>
   `;
-  node.querySelector(".citation-button").addEventListener("click", () => citationDialog.showModal());
+  node.querySelector(".citation-button")?.addEventListener("click", () => citationDialog.showModal());
+  node.querySelectorAll(".next-actions button").forEach((button) => {
+    button.addEventListener("click", () => submitQuestion(button.textContent));
+  });
   node.querySelector(".correction button").addEventListener("click", () => {
     setContext(false);
     selection.focus();
@@ -121,6 +162,10 @@ function submitQuestion(text) {
 selection.addEventListener("click", () => setContext(true));
 clearContext.addEventListener("click", () => setContext(false));
 suggestions.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-question]");
+  if (button) submitQuestion(button.dataset.question);
+});
+demoCases.addEventListener("click", (event) => {
   const button = event.target.closest("[data-question]");
   if (button) submitQuestion(button.dataset.question);
 });
