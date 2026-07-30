@@ -43,7 +43,7 @@ Tín hiệu mining ban đầu trên 1.261 message của học viên:
 
 Các trạng thái đã dựng:
 
-1. **Nguồn học:** web dùng ảnh 1920×1080 xuất trực tiếp từ trang 12 của `d1-slide-hackathon.pdf`; không tự vẽ lại slide nên giữ đúng font, bố cục, watermark và nội dung nguồn.
+1. **Nguồn học:** PDF.js đọc trực tiếp cả `d1-slide-hackathon.pdf` và `d2-slide-hackathon.pdf`; người dùng chọn được bộ Day 1/Day 2 và toàn bộ 29 trang mỗi bộ. Slide không bị vẽ lại nên giữ đúng font, bố cục, watermark và nội dung nguồn.
 2. **Trước khi chọn:** ô hỏi bị khóa để tránh câu hỏi mất ngữ cảnh.
 3. **Đã chọn:** khay dưới PDF mô phỏng đoạn bôi đen và hiện nút hỏi.
 4. **Đang trả lời:** trạng thái chờ ngắn.

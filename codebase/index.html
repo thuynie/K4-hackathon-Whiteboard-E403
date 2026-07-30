@@ -14,12 +14,12 @@
       <span>Vlearn</span>
     </a>
     <div class="course">
-      <span class="eyebrow">AI IN ACTION · DAY 1</span>
-      <strong>AI &amp; LLM Foundation</strong>
+      <span class="eyebrow" id="courseEyebrow">AI IN ACTION · DAY 1</span>
+      <strong id="courseTitle">AI &amp; LLM Foundation</strong>
     </div>
     <div class="progress" aria-label="Tiến độ bài học">
-      <span>12 / 29</span>
-      <span class="progress-track"><span></span></span>
+      <span id="headerPageLabel">12 / 29</span>
+      <span class="progress-track"><span id="progressFill"></span></span>
     </div>
   </header>
 
@@ -27,29 +27,41 @@
     <section class="lesson" aria-label="Nội dung slide">
       <nav class="lesson-toolbar">
         <button class="icon-button" type="button" aria-label="Ẩn danh sách trang">☰</button>
-        <span class="viewer-title">Day 1 · AI &amp; LLM Foundation</span>
+        <span class="viewer-title" id="viewerTitle">Day 1 · AI &amp; LLM Foundation</span>
         <span class="toolbar-spacer"></span>
-        <button class="ghost-button" type="button">−</button>
-        <span>82%</span>
-        <button class="ghost-button" type="button">＋</button>
+        <button class="ghost-button" id="previousPage" type="button" aria-label="Trang trước">←</button>
+        <span id="currentPageLabel">12 / 29</span>
+        <button class="ghost-button" id="nextPage" type="button" aria-label="Trang sau">→</button>
         <button class="ghost-button" type="button" id="resetButton">Đặt lại demo</button>
       </nav>
 
-      <div class="pdf-workspace">
-        <div class="pdf-frame">
-          <img src="slide-day1-page12.png" alt="Slide Day 1 trang 12: Sinh văn bản bằng vòng lặp dự đoán, nối token và chạy lại">
-        </div>
-        <div class="selection-tray">
-          <div>
-            <span class="selection-label">ĐOẠN ĐƯỢC CHỌN · TRANG 12</span>
-            <button class="selection" id="selection" type="button" aria-pressed="false">
-              “Mỗi token mới được nối vào ngữ cảnh, rồi model chạy lại từ đầu —
-              vòng lặp <strong>predict → append → rerun</strong>”
+      <div class="slide-library">
+        <aside class="library-sidebar">
+          <p>BỘ SLIDE</p>
+          <div class="deck-switcher" role="group" aria-label="Chọn bộ slide">
+            <button class="active" type="button" data-deck="day1">Day 1<small>AI &amp; LLM Foundation</small></button>
+            <button type="button" data-deck="day2">Day 2<small>Xác định bài toán AI</small></button>
+          </div>
+          <div class="thumbnail-list" id="thumbnailList" aria-label="Danh sách trang"></div>
+        </aside>
+
+        <div class="pdf-workspace">
+          <div class="pdf-frame">
+            <canvas id="slideCanvas" aria-label="Trang slide đang chọn"></canvas>
+            <div class="slide-loading" id="slideLoading">Đang tải bộ slide…</div>
+          </div>
+          <div class="selection-tray">
+            <div>
+              <span class="selection-label" id="selectionLabel">NỘI DUNG TRANG 12 · NHẤN ĐỂ CHỌN</span>
+              <button class="selection" id="selection" type="button" aria-pressed="false">
+                Mỗi token mới được nối vào ngữ cảnh, rồi model chạy lại từ đầu —
+                vòng lặp <strong>predict → append → rerun</strong>
+              </button>
+            </div>
+            <button class="ask-selection" id="askSelection" type="button" hidden>
+              <span>✦</span> Hỏi tutor
             </button>
           </div>
-          <button class="ask-selection" id="askSelection" type="button" hidden>
-            <span>✦</span> Hỏi tutor
-          </button>
         </div>
       </div>
     </section>
@@ -78,7 +90,7 @@
 
       <form class="composer" id="composer">
         <div class="context-chip" id="contextChip" hidden>
-          <span><b>Đang hỏi về · Trang 12</b><small id="contextText"></small></span>
+          <span><b id="contextTitle">Đang hỏi về · Day 1 · Trang 12</b><small id="contextText"></small></span>
           <button type="button" id="clearContext" aria-label="Bỏ đoạn đã chọn">×</button>
         </div>
         <div class="suggestions" id="suggestions" hidden>
@@ -100,9 +112,9 @@
     <button class="dialog-close" id="closeDialog" type="button" aria-label="Đóng">×</button>
     <span class="citation-label">2 CĂN CỨ ĐƯỢC DÙNG</span>
     <h2>Đối chiếu câu giải thích</h2>
-    <section class="source-card">
-      <b>Slide · Trang 12</b>
-      <blockquote>“Mỗi token mới được nối vào ngữ cảnh, rồi model chạy lại từ đầu — vòng lặp predict → append → rerun.”</blockquote>
+    <section class="source-card" id="transcriptSource">
+      <b id="dialogSlideSource">Slide · Day 1 · Trang 12</b>
+      <blockquote id="dialogExcerpt">“Mỗi token mới được nối vào ngữ cảnh, rồi model chạy lại từ đầu — vòng lặp predict → append → rerun.”</blockquote>
     </section>
     <section class="source-card">
       <b>Transcript · [T04-047]</b>
@@ -112,6 +124,6 @@
     <button class="primary-button" id="backToChat" type="button">Quay lại câu trả lời</button>
   </dialog>
 
-  <script src="app.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>

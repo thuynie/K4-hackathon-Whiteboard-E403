@@ -2,27 +2,30 @@
 
 ## Chạy prototype
 
-Không cần cài dependency:
+Không cần cài dependency. Do trình duyệt cần đọc hai file PDF, chạy local server tại **thư mục gốc repo**:
 
-1. Mở trực tiếp `index.html`; hoặc
-2. Tại thư mục `codebase/`, chạy `python -m http.server 8080`, rồi mở `http://localhost:8080`.
+```powershell
+python -m http.server 8080
+```
+
+Sau đó mở `http://localhost:8080/codebase/`. Không mở trực tiếp `index.html` bằng `file://`.
 
 ## Flow cần show tại CP2
 
-1. Nhấn vào đoạn văn trên slide để mô phỏng thao tác bôi đen.
-2. Nhấn nút nổi `Hỏi tutor về đoạn này`.
-3. Chọn `Giải thích dễ hiểu`, `Cho ví dụ`, hoặc tự nhập câu hỏi.
-4. Đọc câu trả lời và nhấn `Kiểm tra 2 căn cứ`.
-5. Đối chiếu slide trang 12 và transcript `[T04-047]`.
-6. Đóng căn cứ, sau đó thử `Không đúng ý mình → chọn lại đoạn`.
+1. Chọn bộ `Day 1` hoặc `Day 2`.
+2. Chọn một trong 29 thumbnail trang.
+3. Nhấn khay nội dung dưới slide để mô phỏng bôi đen, rồi nhấn `Hỏi tutor`.
+4. Chọn `Giải thích dễ hiểu`, `Cho ví dụ`, hoặc tự nhập câu hỏi.
+5. Đọc câu trả lời và kiểm tra căn cứ đúng bộ/trang.
+6. Thử `Không đúng ý mình → chọn lại đoạn`.
 
 Flow trên đi hết được không cần can thiệp tay giữa chừng.
 
 ## Phạm vi CP2
 
 - Mức hiện tại: **Mock**.
-- Thật: giao diện web; ảnh trang 12 được xuất nguyên vẹn từ `data/vlearn-pack/slides/d1-slide-hackathon.pdf` để giữ đúng font, bố cục và nội dung; trạng thái chọn đoạn, nút hỏi, panel tutor, mở căn cứ, feedback và correction.
-- Mock: thao tác bôi đen được mô phỏng bằng khay “Đoạn được chọn”; câu trả lời tutor, confidence và retrieval.
+- Thật: giao diện web; PDF.js đọc trực tiếp toàn bộ 29 trang Day 1 và 29 trang Day 2 từ `data/vlearn-pack/slides/`; chọn bộ, thumbnail, chuyển trang, trạng thái chọn đoạn, panel tutor, feedback và correction.
+- Mock: thao tác bôi đen được mô phỏng bằng khay nội dung trang; câu trả lời tutor, confidence và retrieval.
 - Chưa có API/LLM thật. Đây là yêu cầu của CP3, không được tính là đã hoàn thành ở CP2.
 
 ## Lát cắt đang thể hiện
