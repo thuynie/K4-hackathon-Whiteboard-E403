@@ -42,6 +42,16 @@
 * **Quote 2 (Q2)**: *"Phần lịch sử hỏi (Session History) rất hữu ích, bấm vào câu hỏi cũ trong lịch sử là ứng dụng tự nhảy đúng về trang slide đó luôn."*
 * **Quote 3 (Q3)**: *"Cần bổ sung thêm hiển thị badge rõ ràng khi đang chạy Live Gemini API hay Offline Engine để người dùng biết khi nào AI đang gọi API thật."*
 
+### 👤 4. Vũ Minh Hoàng (TA / Trợ giảng khóa học)
+
+* **Quote 1 (Q1)**: *"Tutor trả lời rất bám sát tài liệu slide [Trang N], giúp giải tỏa đáng kể khối lượng câu hỏi lặp đi lặp lại của học viên trong khung chat."*
+* **Quote 2 (Q2)**: *"Cách từ chối các câu hỏi out-of-scope như dự đoán cổ phiếu hay thời tiết rất chuẩn, bảo vệ được uy tín giáo trình."*
+
+### 👤 5. Lê Ngọc Anh (Học viên khóa 3)
+
+* **Quote 1 (Q1)**: *"Giao diện 2 cột vừa xem slide vừa hỏi Tutor rất tiện. Thích nhất là nút Fact Inspector 2 cột đối chiếu nguyên văn slide với câu trả lời của AI."*
+* **Quote 2 (Q2)**: *"Cấu trúc 3 bước có phần 'Tự kiểm tra' ở cuối giúp mình nhớ bài lâu hơn hẳn so với việc đọc chat thông thường."*
+
 ---
 
 ## 🔄 TỔNG HỢP FEEDBACK & ĐIỀU CHỈNH SẢN PHẨM TRỰC TIẾP (PRODUCT ADJUSTMENTS)
