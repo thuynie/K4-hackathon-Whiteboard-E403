@@ -232,8 +232,42 @@ function answerFor(text) {
   };
 }
 
-function addTutorAnswer(text) {
-  const answer = answerFor(text);
+async function callRealLLMAPI(questionText) {
+  const apiKey = localStorage.getItem("vlearn_api_key");
+  if (!apiKey) return null;
+
+  const deck = decks[activeDeckKey];
+  const systemPrompt = `Bạn là VLearn Focus Tutor.
+Nhiệm vụ: Trả lời câu hỏi của học viên bám sát chính xác tài liệu Slide [${deck.label} - Trang ${currentPage}]: "${selectedExcerpt}".
+BẮT BUỘC: Trích dẫn [Trang ${currentPage}]. Nếu không có trong slide, từ chối rõ ràng và đề nghị chuyển TA.`;
+
+  try {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\n[HỌC VIÊN HỎI]: ${questionText}` }] }]
+      })
+    });
+    const data = await res.json();
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (reply) {
+      return {
+        type: "happy",
+        title: `Giải thích từ Gemini API (Live AI · Trang ${currentPage})`,
+        body: reply,
+        analogy: "⚡ Lời gọi AI thật trực tiếp từ Gemini 1.5 Flash API cho CP3."
+      };
+    }
+  } catch (err) {
+    console.warn("Lỗi gọi Gemini API, chuyển sang mock:", err);
+  }
+  return null;
+}
+
+function addTutorAnswer(text, customAnswer = null) {
+  const answer = customAnswer || answerFor(text);
   const isHappy = answer.type === "happy";
   const deck = decks[activeDeckKey];
   const hasTranscript = activeDeckKey === "day1" && currentPage === 12;
@@ -275,16 +309,19 @@ function addTutorAnswer(text) {
   messages.appendChild(node);
 }
 
-function submitQuestion(text) {
+async function submitQuestion(text) {
   if (!hasContext || !text.trim()) return;
   welcome?.remove();
   addUserMessage(text.trim());
   question.value = "";
   const typing = addTyping();
   scrollMessages();
+  
+  const realLLMAnswer = await callRealLLMAPI(text.trim());
+  
   window.setTimeout(() => {
     typing.remove();
-    addTutorAnswer(text);
+    addTutorAnswer(text, realLLMAnswer);
     scrollMessages();
   }, 650);
 }
@@ -315,12 +352,22 @@ question.addEventListener("keydown", (event) => {
     submitQuestion(question.value);
   }
 });
-resetButton.addEventListener("click", () => window.location.reload());
-closeDialog.addEventListener("click", () => citationDialog.close());
-backToChat.addEventListener("click", () => citationDialog.close());
-citationDialog.addEventListener("click", (event) => {
-  if (event.target === citationDialog) citationDialog.close();
-});
+  const apiKeyBtn = document.querySelector("#apiKeyButton");
+  if (apiKeyBtn) {
+    apiKeyBtn.addEventListener("click", () => {
+      const currentKey = localStorage.getItem("vlearn_api_key") || "";
+      const inputKey = prompt("Nhập Gemini / OpenAI API Key để thực hiện lời gọi AI thật (CP3):", currentKey);
+      if (inputKey !== null) {
+        localStorage.setItem("vlearn_api_key", inputKey.trim());
+        alert(inputKey.trim() ? "🟢 Đã lưu API Key! Hệ thống sẽ thực hiện lời gọi AI thật khi bạn hỏi." : "⚡ Đã xóa API Key, hệ thống quay lại chế độ Mock.");
+      }
+    });
+  }
+  closeDialog.addEventListener("click", () => citationDialog.close());
+  backToChat.addEventListener("click", () => citationDialog.close());
+  citationDialog.addEventListener("click", (event) => {
+    if (event.target === citationDialog) citationDialog.close();
+  });
 
 loadDeck("day1", 12).catch((error) => {
   slideLoading.hidden = false;
