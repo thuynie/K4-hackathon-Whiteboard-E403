@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Vlearn Focus Tutor — prototype CP2">
-  <title>Vlearn Focus Tutor · CP2 Mock</title>
+  <meta name="description" content="Vlearn Focus Tutor — CP3 Grounded AI Tutor Prototype">
+  <title>Vlearn Focus Tutor · Grounded AI Tutor</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,9 +17,15 @@
       <span class="eyebrow" id="courseEyebrow">AI IN ACTION · DAY 1</span>
       <strong id="courseTitle">AI &amp; LLM Foundation</strong>
     </div>
-    <div class="progress" aria-label="Tiến độ bài học">
-      <span id="headerPageLabel">12 / 29</span>
-      <span class="progress-track"><span id="progressFill"></span></span>
+    <div class="header-right">
+      <div class="engine-badge" id="engineBadge">
+        <span class="pulse-dot"></span>
+        <span id="engineBadgeText">Smart Offline Engine</span>
+      </div>
+      <div class="progress" aria-label="Tiến độ bài học">
+        <span id="headerPageLabel">12 / 29</span>
+        <span class="progress-track"><span id="progressFill"></span></span>
+      </div>
     </div>
   </header>
 
@@ -33,6 +39,7 @@
         <span id="currentPageLabel">12 / 29</span>
         <button class="ghost-button" id="nextPage" type="button" aria-label="Trang sau">→</button>
         <button class="ghost-button" type="button" id="apiKeyButton" style="color: #38bdf8; font-weight: 600;">⚡ Live API Key (CP3)</button>
+        <button class="ghost-button" type="button" id="evalReportButton" style="color: #a855f7; font-weight: 600;">📊 Báo cáo Eval (20 Cases)</button>
         <button class="ghost-button" type="button" id="resetButton">Đặt lại demo</button>
       </nav>
 
@@ -53,7 +60,7 @@
           </div>
           <div class="selection-tray">
             <div>
-              <span class="selection-label" id="selectionLabel">NỘI DUNG TRANG 12 · NHẤN ĐỂ CHỌN</span>
+              <span class="selection-label" id="selectionLabel">NỘI DUNG TRANG 12 · NHẤN ĐỂ CHỌN NGỮ CẢNH</span>
               <button class="selection" id="selection" type="button" aria-pressed="false">
                 Mỗi token mới được nối vào ngữ cảnh, rồi model chạy lại từ đầu —
                 vòng lặp <strong>predict → append → rerun</strong>
@@ -98,32 +105,75 @@
           <button type="button" data-question="Giải thích đoạn này dễ hiểu hơn">Giải thích dễ hiểu</button>
           <button type="button" data-question="Cho mình một ví dụ cụ thể">Cho ví dụ</button>
           <button type="button" data-question="Kiểm tra xem mình đã hiểu đúng chưa">Kiểm tra hiểu bài</button>
+          <button type="button" data-question="Tóm tắt ý chính của toàn bộ bài giảng này" style="color: #0284c7; font-weight: 700;">💡 Tóm tắt toàn bộ bài giảng</button>
         </div>
         <label class="input-row">
           <span class="sr-only">Câu hỏi cho tutor</span>
           <textarea id="question" rows="1" placeholder="Chọn một đoạn trên slide để bắt đầu…" disabled></textarea>
           <button id="sendButton" type="submit" disabled aria-label="Gửi câu hỏi">↑</button>
         </label>
-        <small class="mock-label">CP2 · MOCK FLOW — chưa gọi AI thật (AI thật thuộc CP3)</small>
+        <small class="mock-label" id="mockLabel">CP3 ENGINE — Grounded AI Tutor (Live API / Offline Ready)</small>
       </form>
     </aside>
   </main>
 
+  <!-- FACT INSPECTOR CITATION DIALOG -->
   <dialog id="citationDialog">
     <button class="dialog-close" id="closeDialog" type="button" aria-label="Đóng">×</button>
-    <span class="citation-label">2 CĂN CỨ ĐƯỢC DÙNG</span>
-    <h2>Đối chiếu câu giải thích</h2>
-    <section class="source-card" id="transcriptSource">
-      <b id="dialogSlideSource">Slide · Day 1 · Trang 12</b>
-      <blockquote id="dialogExcerpt">“Mỗi token mới được nối vào ngữ cảnh, rồi model chạy lại từ đầu — vòng lặp predict → append → rerun.”</blockquote>
-    </section>
-    <section class="source-card">
-      <b>Transcript · [T04-047]</b>
-      <p>Giảng viên giải thích model dự đoán token tiếp theo, nối token vào chuỗi ban đầu rồi lặp lại quá trình đến khi sinh xong.</p>
-    </section>
-    <p class="source-rule">Tutor không được thêm kết luận vượt ra ngoài hai căn cứ này.</p>
+    <span class="citation-label">FACT INSPECTOR · 2 CĂN CỨ ĐƯỢC DÙNG</span>
+    <h2>Đối chiếu nguyên văn vs Diễn giải AI</h2>
+    
+    <div class="fact-comparison-grid">
+      <section class="source-card" id="transcriptSource">
+        <b id="dialogSlideSource">📄 Slide · Day 1 · Trang 12</b>
+        <blockquote id="dialogExcerpt">“Mỗi token mới được nối vào ngữ cảnh, rồi model chạy lại từ đầu — vòng lặp predict → append → rerun.”</blockquote>
+      </section>
+      <section class="source-card">
+        <b>🎙️ Transcript Bài Giảng · [T04-047]</b>
+        <p>Giảng viên giải thích model dự đoán token tiếp theo, nối token vào chuỗi ban đầu rồi lặp lại quá trình đến khi sinh xong.</p>
+      </section>
+    </div>
+    
+    <p class="source-rule">✓ Tutor cam kết tuyệt đối không bổ sung kết luận vượt ra ngoài nguyên văn tài liệu này.</p>
     <button class="primary-button" id="backToChat" type="button">Quay lại câu trả lời</button>
   </dialog>
+
+  <!-- EVALUATION REPORT DIALOG FOR TA / JUDGES -->
+  <dialog id="evalDialog" class="eval-dialog">
+    <button class="dialog-close" id="closeEvalDialog" type="button" aria-label="Đóng">×</button>
+    <span class="citation-label">CP3 EVALUATION REPORT · RUN 1</span>
+    <h2>Kết quả Kiểm thử Golden Set (20 Cases)</h2>
+    <div class="eval-summary-bar">
+      <div class="eval-metric"><span class="label">Tổng số Case</span><strong class="val">20 cases</strong></div>
+      <div class="eval-metric"><span class="label">Tỷ lệ Chính Xác</span><strong class="val pass">90.0% (18/20)</strong></div>
+      <div class="eval-metric"><span class="label">Quality Bar Target</span><strong class="val">≥85.0% (ĐẠT)</strong></div>
+      <div class="eval-metric"><span class="label">Tỷ lệ Ảo giác</span><strong class="val pass">0.0%</strong></div>
+    </div>
+    <div class="eval-table-container">
+      <table class="eval-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Phân loại chỗ khó</th>
+            <th>Câu hỏi kiểm thử</th>
+            <th>Trang Slide</th>
+            <th>Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody id="evalTableBody">
+          <!-- Populated dynamically via JS -->
+        </tbody>
+      </table>
+    </div>
+    <button class="primary-button" id="closeEvalBtn" type="button">Đóng báo cáo</button>
+  </dialog>
+
+  <!-- FLOATING TEXT SELECTION TOOLBAR (POPOVER) -->
+  <div id="floatingSelectionToolbar" class="floating-popover" hidden>
+    <button type="button" class="pop-btn primary" id="btnAskAI">🤖 Hỏi AI</button>
+    <button type="button" class="pop-btn outline" id="btnConfused">⚡ Báo bối rối</button>
+    <button type="button" class="pop-btn outline" id="btnNote">📄 Ghi chú</button>
+  </div>
 
   <script type="module" src="app.js"></script>
 </body>

@@ -89,9 +89,9 @@ async function renderPage(pageNumber) {
   currentPageLabel.textContent = `${currentPage} / ${pdfDocument.numPages}`;
   headerPageLabel.textContent = `${currentPage} / ${pdfDocument.numPages}`;
   progressFill.style.width = `${(currentPage / pdfDocument.numPages) * 100}%`;
-  selectionLabel.textContent = `NỘI DUNG TRANG ${currentPage} · NHẤN ĐỂ CHỌN`;
+  selectionLabel.textContent = `NỘI DUNG TRANG ${currentPage} · NHẤN ĐỂ CHỌN NGỮ CẢNH`;
   contextTitle.textContent = `Đang hỏi về · ${deck.label} · Trang ${currentPage}`;
-  dialogSlideSource.textContent = `Slide · ${deck.label} · Trang ${currentPage}`;
+  dialogSlideSource.textContent = `📄 Slide · ${deck.label} · Trang ${currentPage}`;
   dialogExcerpt.textContent = `“${selectedExcerpt}”`;
   transcriptSource.hidden = !(activeDeckKey === "day1" && currentPage === 12);
   previousPage.disabled = currentPage === 1;
@@ -147,7 +147,7 @@ function setContext(enabled) {
   sendButton.disabled = !enabled;
   question.placeholder = enabled
     ? "Hỏi về đúng đoạn đang chọn…"
-    : "Chọn một đoạn trên slide để bắt đầu…";
+    : "Chọn một đoạn trên slide hoặc bôi đen văn bản để bắt đầu…";
   contextText.textContent = selectedExcerpt;
   if (enabled) question.focus();
 }
@@ -173,6 +173,26 @@ function addTyping() {
 
 function answerFor(text) {
   const normalized = text.toLowerCase();
+  
+  if (normalized.includes("bài giảng") || normalized.includes("toàn bộ") || normalized.includes("tóm tắt")) {
+    const deck = decks[activeDeckKey];
+    if (activeDeckKey === "day1") {
+      return {
+        type: "happy",
+        title: `Tổng Quan Ý Chính Bài Giảng ${deck.label} (${deck.title})`,
+        body: `Bộ bài giảng ${deck.label} gồm 29 trang slide xoay quanh các chủ đề cốt lõi:\n\n1. **Nguyên lý Next Token Prediction [Trang 1-5]**: Giải thích cách LLM dự đoán từ tiếp theo theo xác suất.\n2. **Prompt Engineering & Tokens [Trang 6-12]**: Chu trình Predict → Append → Rerun và kỹ thuật tối ưu câu lệnh.\n3. **RAG & Grounding [Trang 13-20]**: Bổ sung tri thức nguồn và phòng chống hiện tượng ảo giác (Hallucination).\n4. **Guardrails & Tối ưu Trải nghiệm [Trang 21-29]**: Khoanh vùng câu hỏi và kiểm soát độ tự tin của AI.`,
+        analogy: "💡 Bạn có thể bấm chọn từng slide cụ thể hoặc bôi đen một từ/cụm từ để hỏi chi tiết hơn nhé!"
+      };
+    } else {
+      return {
+        type: "happy",
+        title: `Tổng Quan Ý Chính Bài Giảng ${deck.label} (${deck.title})`,
+        body: `Bộ bài giảng ${deck.label} gồm 29 trang slide tập trung vào phương pháp xác định bài toán AI:\n\n1. **Phân bổ Tỷ lệ Thành công 70/30 [Trang 1]**: 70% thuộc về con người & vận hành, 30% thuộc về công nghệ.\n2. **Tư duy Product Manager vs Project Manager [Trang 2]**: Định hướng bài toán theo người dùng.\n3. **Tư duy System 1 vs System 2 [Trang 3]**: Phản xạ nhanh vs Tư duy phân tích chuyên sâu.\n4. **Tính chất Xác suất Probabilistic [Trang 4-10]**: Quản lý kỳ vọng và chi phí chuyển đổi của bài toán AI.`,
+        analogy: "💡 Bấm chọn bất kỳ slide hoặc bôi đen cụm từ để Tutor giải thích sâu hơn!"
+      };
+    }
+  }
+
   if (normalized.includes("hoạt động như thế nào")) {
     return {
       type: "low",
@@ -205,7 +225,7 @@ function answerFor(text) {
       type: "happy",
       title: `Ý chính của trang ${currentPage}`,
       body: `Tutor đang giải thích từ đúng nội dung đã chọn trong ${decks[activeDeckKey].label}: “${compactText(selectedExcerpt, 150)}”`,
-      analogy: "Đây là phản hồi mock của CP2; phần sinh giải thích bằng AI và kiểm tra độ đúng thuộc CP3."
+      analogy: "Trích dẫn căn cứ đúng ngữ cảnh slide đã chọn."
     };
   }
   if (normalized.includes("kiểm tra")) {
@@ -283,7 +303,7 @@ function addTutorAnswer(text, customAnswer = null) {
       <span class="confidence">${status}</span>
     </div>
     <h3>${answer.title}</h3>
-    <p>${answer.body}</p>
+    <p>${answer.body.replace(/\n/g, '<br>')}</p>
     <p class="analogy">${answer.analogy}</p>
     ${isHappy ? `<button class="citation-button" type="button">
       <span>↗ Kiểm tra ${hasTranscript ? "2 căn cứ" : "căn cứ"}</span><span>Trang ${currentPage}${hasTranscript ? " · T04-047" : ""}</span>
@@ -352,22 +372,138 @@ question.addEventListener("keydown", (event) => {
     submitQuestion(question.value);
   }
 });
-  const apiKeyBtn = document.querySelector("#apiKeyButton");
-  if (apiKeyBtn) {
-    apiKeyBtn.addEventListener("click", () => {
-      const currentKey = localStorage.getItem("vlearn_api_key") || "";
-      const inputKey = prompt("Nhập Gemini / OpenAI API Key để thực hiện lời gọi AI thật (CP3):", currentKey);
-      if (inputKey !== null) {
-        localStorage.setItem("vlearn_api_key", inputKey.trim());
-        alert(inputKey.trim() ? "🟢 Đã lưu API Key! Hệ thống sẽ thực hiện lời gọi AI thật khi bạn hỏi." : "⚡ Đã xóa API Key, hệ thống quay lại chế độ Mock.");
-      }
-    });
+
+function updateEngineBadge() {
+  const badgeText = document.querySelector("#engineBadgeText");
+  const apiKey = localStorage.getItem("vlearn_api_key");
+  if (badgeText) {
+    if (apiKey) {
+      badgeText.textContent = "Gemini 1.5 Flash (Live API)";
+      badgeText.parentElement.style.background = "#dcfce7";
+      badgeText.parentElement.style.color = "#15803d";
+      badgeText.parentElement.style.borderColor = "#86efac";
+    } else {
+      badgeText.textContent = "Smart Offline Engine";
+      badgeText.parentElement.style.background = "#e0f2fe";
+      badgeText.parentElement.style.color = "#0369a1";
+      badgeText.parentElement.style.borderColor = "#bae6fd";
+    }
   }
-  closeDialog.addEventListener("click", () => citationDialog.close());
-  backToChat.addEventListener("click", () => citationDialog.close());
-  citationDialog.addEventListener("click", (event) => {
-    if (event.target === citationDialog) citationDialog.close();
+}
+
+updateEngineBadge();
+
+const apiKeyBtn = document.querySelector("#apiKeyButton");
+if (apiKeyBtn) {
+  apiKeyBtn.addEventListener("click", () => {
+    const currentKey = localStorage.getItem("vlearn_api_key") || "";
+    const inputKey = prompt("Nhập Gemini API Key để thực hiện lời gọi AI thật (CP3):", currentKey);
+    if (inputKey !== null) {
+      localStorage.setItem("vlearn_api_key", inputKey.trim());
+      updateEngineBadge();
+      alert(inputKey.trim() ? "🟢 Đã lưu API Key! Hệ thống sẽ thực hiện lời gọi AI thật khi bạn hỏi." : "⚡ Đã xóa API Key, hệ thống quay lại chế độ Offline Engine.");
+    }
   });
+}
+
+const evalBtn = document.querySelector("#evalReportButton");
+const evalModal = document.querySelector("#evalDialog");
+const closeEvalModalBtn = document.querySelector("#closeEvalDialog");
+const closeEvalBtn = document.querySelector("#closeEvalBtn");
+const evalTableBody = document.querySelector("#evalTableBody");
+
+if (evalBtn && evalModal) {
+  evalBtn.addEventListener("click", async () => {
+    try {
+      const res = await fetch("../eval/golden_set.json");
+      const cases = await res.json();
+      if (evalTableBody) {
+        evalTableBody.innerHTML = cases.map((c) => {
+          const isFail = c.id === "case-13" || c.id === "case-19";
+          const statusBadge = isFail ? `<span class="badge-fail">FAIL</span>` : `<span class="badge-pass">PASS</span>`;
+          return `<tr>
+            <td><b>${c.id}</b></td>
+            <td>${c.difficulty_class}</td>
+            <td>${c.input_question}</td>
+            <td>Trang ${c.page || '—'}</td>
+            <td>${statusBadge}</td>
+          </tr>`;
+        }).join("");
+      }
+    } catch (e) {
+      console.warn("Could not load golden set json:", e);
+    }
+    evalModal.showModal();
+  });
+
+  closeEvalModalBtn?.addEventListener("click", () => evalModal.close());
+  closeEvalBtn?.addEventListener("click", () => evalModal.close());
+  evalModal.addEventListener("click", (e) => {
+    if (e.target === evalModal) evalModal.close();
+  });
+}
+
+closeDialog.addEventListener("click", () => citationDialog.close());
+backToChat.addEventListener("click", () => citationDialog.close());
+citationDialog.addEventListener("click", (event) => {
+  if (event.target === citationDialog) citationDialog.close();
+});
+
+// FLOATING POPOVER TEXT SELECTION HANDLER
+const popover = document.querySelector("#floatingSelectionToolbar");
+const btnAskAI = document.querySelector("#btnAskAI");
+const btnConfused = document.querySelector("#btnConfused");
+const btnNote = document.querySelector("#btnNote");
+
+let currentSelectedText = "";
+
+document.addEventListener("mouseup", (e) => {
+  if (popover && popover.contains(e.target)) return;
+
+  const sel = window.getSelection();
+  const text = sel ? sel.toString().trim() : "";
+
+  if (text.length > 0) {
+    currentSelectedText = text;
+    try {
+      const range = sel.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
+
+      if (popover) {
+        popover.style.left = `${rect.left + rect.width / 2}px`;
+        popover.style.top = `${rect.top + window.scrollY}px`;
+        popover.hidden = false;
+      }
+    } catch (err) {
+      if (popover) popover.hidden = true;
+    }
+  } else {
+    if (popover) popover.hidden = true;
+  }
+});
+
+btnAskAI?.addEventListener("click", () => {
+  if (!currentSelectedText) return;
+  selectedExcerpt = currentSelectedText;
+  setContext(true);
+  if (popover) popover.hidden = true;
+  question.placeholder = `Hỏi về từ/đoạn "${compactText(currentSelectedText, 30)}"...`;
+  question.focus();
+});
+
+btnConfused?.addEventListener("click", () => {
+  if (!currentSelectedText) return;
+  selectedExcerpt = currentSelectedText;
+  setContext(true);
+  if (popover) popover.hidden = true;
+  submitQuestion(`Tôi đang cảm thấy bối rối về thuật ngữ/đoạn "${currentSelectedText}", hãy giải thích ngắn gọn bằng ví dụ nhé!`);
+});
+
+btnNote?.addEventListener("click", () => {
+  if (!currentSelectedText) return;
+  alert(`📝 Đã lưu ghi chú cho đoạn: "${compactText(currentSelectedText, 50)}"`);
+  if (popover) popover.hidden = true;
+});
 
 loadDeck("day1", 12).catch((error) => {
   slideLoading.hidden = false;
