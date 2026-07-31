@@ -1,3 +1,9 @@
 .DS_Store
 node_modules/
 *.env
+
+# eval — cache & rác sinh ra khi chạy
+eval/__pycache__/
+eval/.slide_text_cache.json
+eval/results_dryrun.md
+eval/dryrun_raw.json

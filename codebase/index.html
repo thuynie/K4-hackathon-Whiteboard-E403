@@ -38,8 +38,8 @@
         <button class="ghost-button" id="previousPage" type="button" aria-label="Trang trước">←</button>
         <span id="currentPageLabel">12 / 29</span>
         <button class="ghost-button" id="nextPage" type="button" aria-label="Trang sau">→</button>
-        <button class="ghost-button" type="button" id="apiKeyButton" style="color: #38bdf8; font-weight: 600;">⚡ Live API Key (CP3)</button>
-        <button class="ghost-button" type="button" id="evalReportButton" style="color: #a855f7; font-weight: 600;">📊 Báo cáo Eval (20 Cases)</button>
+        <button class="ghost-button accent" type="button" id="apiKeyButton">⚡ Live API Key</button>
+        <button class="ghost-button accent" type="button" id="evalReportButton">📊 Báo cáo Eval</button>
         <button class="ghost-button" type="button" id="resetButton">Đặt lại demo</button>
       </nav>
 
@@ -54,22 +54,31 @@
         </aside>
 
         <div class="pdf-workspace">
-          <div class="pdf-frame">
-            <canvas id="slideCanvas" aria-label="Trang slide đang chọn"></canvas>
+          <div class="pdf-frame" id="pdfFrame">
+            <!-- canvas = ảnh trang slide · textLayer = chữ trong suốt phủ lên trên để bôi đen thật -->
+            <div class="pdf-page" id="pdfPage">
+              <canvas id="slideCanvas" aria-label="Trang slide đang chọn"></canvas>
+              <div class="textLayer" id="textLayer"></div>
+            </div>
             <div class="slide-loading" id="slideLoading">Đang tải bộ slide…</div>
           </div>
-          <div class="selection-tray">
-            <div>
-              <span class="selection-label" id="selectionLabel">NỘI DUNG TRANG 12 · NHẤN ĐỂ CHỌN NGỮ CẢNH</span>
-              <button class="selection" id="selection" type="button" aria-pressed="false">
-                Mỗi token mới được nối vào ngữ cảnh, rồi model chạy lại từ đầu —
-                vòng lặp <strong>predict → append → rerun</strong>
-              </button>
-            </div>
-            <button class="ask-selection" id="askSelection" type="button" hidden>
-              <span>✦</span> Hỏi tutor
+          <!-- Khối nội dung trang: thứ học viên đọc để biết trang này nói gì -->
+          <section class="selection-tray" aria-label="Nội dung trang đang xem">
+            <header class="tray-head">
+              <span class="selection-label" id="selectionLabel">NỘI DUNG TRANG 12</span>
+              <span class="tray-hint">Bôi đen trực tiếp trên slide để hỏi đúng một đoạn</span>
+            </header>
+            <button class="selection" id="selection" type="button" aria-pressed="false">
+              Mỗi token mới được nối vào ngữ cảnh, rồi model chạy lại từ đầu —
+              vòng lặp <strong>predict → append → rerun</strong>
             </button>
-          </div>
+            <footer class="tray-foot">
+              <span class="tray-note">Tutor chỉ trả lời dựa trên nội dung này</span>
+              <button class="ask-selection" id="askSelection" type="button" hidden>
+                <span>✦</span> Hỏi tutor về đoạn này
+              </button>
+            </footer>
+          </section>
         </div>
       </div>
     </section>
@@ -141,14 +150,10 @@
   <!-- EVALUATION REPORT DIALOG FOR TA / JUDGES -->
   <dialog id="evalDialog" class="eval-dialog">
     <button class="dialog-close" id="closeEvalDialog" type="button" aria-label="Đóng">×</button>
-    <span class="citation-label">CP3 EVALUATION REPORT · RUN 1</span>
-    <h2>Kết quả Kiểm thử Golden Set (20 Cases)</h2>
-    <div class="eval-summary-bar">
-      <div class="eval-metric"><span class="label">Tổng số Case</span><strong class="val">20 cases</strong></div>
-      <div class="eval-metric"><span class="label">Tỷ lệ Chính Xác</span><strong class="val pass">90.0% (18/20)</strong></div>
-      <div class="eval-metric"><span class="label">Quality Bar Target</span><strong class="val">≥85.0% (ĐẠT)</strong></div>
-      <div class="eval-metric"><span class="label">Tỷ lệ Ảo giác</span><strong class="val pass">0.0%</strong></div>
-    </div>
+    <span class="citation-label">EVALUATION REPORT · RUN 1</span>
+    <h2>Kết quả Kiểm thử Golden Set</h2>
+    <!-- Số liệu đọc từ eval/run1_raw.json (log thô của lượt đo thật), không hard-code -->
+    <div class="eval-summary-bar" id="evalSummaryBar"></div>
     <div class="eval-table-container">
       <table class="eval-table">
         <thead>
