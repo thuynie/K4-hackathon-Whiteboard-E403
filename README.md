@@ -5,6 +5,17 @@
 - Thời lượng: **1,5 ngày** (một ngày build + một buổi demo)
 - Nhóm: **4-5 người** · zone tối đa 5 nhóm · thi theo lớp
 
+## Nhóm Whiteboard-E403
+
+| Thành viên       | Mã học viên | Phần phụ trách |
+|------------------|-------------|---|
+| Hoàng Thị Thuyên | 2A202601910 | Spec, quality bar, demo và validation |
+| Dương Tiến Dũng  | 2A202602020 | Evidence/mining, code và trace |
+| Đặng Quang Trung | 2A202601510 | Prompt, guardrails và eval |
+
+Tên thống nhất trong toàn bộ artifact là **Đăng Quang Trung**. Nhóm cần thay các
+ô mã học viên trước khi nộp; không dùng placeholder làm thông tin chính thức.
+
 ## Bắt đầu từ đâu?
 
 1. Đọc **`01-de-bai.md`** để chọn hướng và hiểu tiêu chí.

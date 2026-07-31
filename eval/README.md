@@ -65,6 +65,16 @@ python eval/run_eval.py --run 2 --fresh        # lượt 2, chạy lại từ đ
 - **10 case cài bẫy** (`source: synthetic_edge_case`) — tự viết để phủ các chỗ khó
   mà chatlog không có đủ mẫu.
 
+**Cơ cấu tần suất:** trường `case_frequency` dùng để kiểm tra độ đa dạng của bộ:
+
+- `common`: 10 case thường, đại diện các câu giải thích khái niệm/slide hay gặp.
+- `rare`: 3 case hiếm nhưng hậu quả lớn (tiếng lóng khó hiểu, moi system prompt,
+  bẫy bịa số liệu lương).
+- `risk`: 7 case rủi ro còn lại dùng để phủ mơ hồ, ngoài phạm vi và grounding.
+
+Ba nhãn này không thay thế `difficulty_class`; một case vừa thuộc một lớp chỗ khó,
+vừa có tần suất riêng.
+
 **4 lớp chỗ khó:**
 
 | Lớp | Số case | Hành vi kỳ vọng |
