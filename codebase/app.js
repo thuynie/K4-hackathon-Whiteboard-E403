@@ -176,18 +176,20 @@ function answerFor(text) {
   
   if (normalized.includes("bài giảng") || normalized.includes("toàn bộ") || normalized.includes("tóm tắt")) {
     const deck = decks[activeDeckKey];
+    const totalPages = pdfDocument ? pdfDocument.numPages : (activeDeckKey === "day1" ? 29 : 24);
+    
     if (activeDeckKey === "day1") {
       return {
         type: "happy",
         title: `Tổng Quan Ý Chính Bài Giảng ${deck.label} (${deck.title})`,
-        body: `Bộ bài giảng ${deck.label} gồm 29 trang slide xoay quanh các chủ đề cốt lõi:\n\n1. **Nguyên lý Next Token Prediction [Trang 1-5]**: Giải thích cách LLM dự đoán từ tiếp theo theo xác suất.\n2. **Prompt Engineering & Tokens [Trang 6-12]**: Chu trình Predict → Append → Rerun và kỹ thuật tối ưu câu lệnh.\n3. **RAG & Grounding [Trang 13-20]**: Bổ sung tri thức nguồn và phòng chống hiện tượng ảo giác (Hallucination).\n4. **Guardrails & Tối ưu Trải nghiệm [Trang 21-29]**: Khoanh vùng câu hỏi và kiểm soát độ tự tin của AI.`,
+        body: `Bộ bài giảng ${deck.label} gồm **${totalPages} trang slide** xoay quanh các chủ đề cốt lõi:\n\n1. **Nguyên lý Next Token Prediction [Trang 1-5]**: Giải thích cách LLM dự đoán từ tiếp theo theo xác suất.\n2. **Prompt Engineering & Tokens [Trang 6-12]**: Chu trình Predict → Append → Rerun và kỹ thuật tối ưu câu lệnh.\n3. **RAG & Grounding [Trang 13-20]**: Bổ sung tri thức nguồn và phòng chống hiện tượng ảo giác (Hallucination).\n4. **Guardrails & Tối ưu Trải nghiệm [Trang 21-${totalPages}]**: Khoanh vùng câu hỏi và kiểm soát độ tự tin của AI.`,
         analogy: "💡 Bạn có thể bấm chọn từng slide cụ thể hoặc bôi đen một từ/cụm từ để hỏi chi tiết hơn nhé!"
       };
     } else {
       return {
         type: "happy",
         title: `Tổng Quan Ý Chính Bài Giảng ${deck.label} (${deck.title})`,
-        body: `Bộ bài giảng ${deck.label} gồm 29 trang slide tập trung vào phương pháp xác định bài toán AI:\n\n1. **Phân bổ Tỷ lệ Thành công 70/30 [Trang 1]**: 70% thuộc về con người & vận hành, 30% thuộc về công nghệ.\n2. **Tư duy Product Manager vs Project Manager [Trang 2]**: Định hướng bài toán theo người dùng.\n3. **Tư duy System 1 vs System 2 [Trang 3]**: Phản xạ nhanh vs Tư duy phân tích chuyên sâu.\n4. **Tính chất Xác suất Probabilistic [Trang 4-10]**: Quản lý kỳ vọng và chi phí chuyển đổi của bài toán AI.`,
+        body: `Bộ bài giảng ${deck.label} gồm **${totalPages} trang slide** tập trung vào phương pháp xác định bài toán AI:\n\n1. **Phân bổ Tỷ lệ Thành công 70/30 [Trang 1-2]**: 70% thuộc về con người & vận hành, 30% thuộc về công nghệ.\n2. **Tư duy Product Manager vs Project Manager [Trang 3-5]**: Định hướng bài toán theo người dùng.\n3. **Tư duy System 1 vs System 2 [Trang 6-10]**: Phản xạ nhanh vs Tư duy phân tích chuyên sâu.\n4. **Tính chất Xác suất Probabilistic [Trang 11-18]**: Quản lý kỳ vọng và chi phí chuyển đổi của bài toán AI.\n5. **Phương pháp Dogfooding & Hoàn thiện Sản phẩm [Trang 19-${totalPages}]**: Thử nghiệm nội bộ và đóng gói trải nghiệm học viên.`,
         analogy: "💡 Bấm chọn bất kỳ slide hoặc bôi đen cụm từ để Tutor giải thích sâu hơn!"
       };
     }
@@ -220,35 +222,40 @@ function answerFor(text) {
       actions: ["Giải thích lại khái niệm", "Cho mình một câu tự kiểm tra"]
     };
   }
-  if (!(activeDeckKey === "day1" && currentPage === 12)) {
+  if (normalized.includes("nghĩa của") || normalized.includes("nghĩa là") || normalized.includes("từ này") || normalized.includes("giải thích từ") || normalized.includes("khái niệm") || normalized.includes("là gì") || normalized.includes("2 từ")) {
+    const excerpt = selectedExcerpt || `Trang ${currentPage}`;
     return {
       type: "happy",
-      title: `Ý chính của trang ${currentPage}`,
-      body: `Tutor đang giải thích từ đúng nội dung đã chọn trong ${decks[activeDeckKey].label}: “${compactText(selectedExcerpt, 150)}”`,
-      analogy: "Trích dẫn căn cứ đúng ngữ cảnh slide đã chọn."
+      title: `Giải thích thông minh cho thuật ngữ "${compactText(excerpt, 45)}"`,
+      body: `📌 **1. Trọng tâm bài học [Trang ${currentPage}]**: Thuật ngữ **"${excerpt}"** là khái niệm cốt lõi nằm trên Slide Trang ${currentPage} thuộc bài học ${decks[activeDeckKey].title}.\n\n💡 **2. Ví dụ thực tế**: Giống như việc gán nhãn trong quy trình sản xuất, thuật ngữ này xác định đúng vai trò của đối tượng trong bài toán AI để tránh nhầm lẫn khi triển khai.\n\n🎯 **3. Tự kiểm tra**: Bạn thử nghĩ xem nếu bỏ qua khái niệm này, bài toán AI của bạn sẽ gặp rủi ro gì ở bước triển khai?`,
+      analogy: `*(Nguồn trích dẫn trực tiếp từ Slide bài giảng Trang ${currentPage})*`
     };
   }
+
   if (normalized.includes("kiểm tra")) {
     return {
       type: "happy",
-      title: "Thử kiểm tra bằng một câu ngắn",
-      body: "Sau khi model chọn được một token mới, điều gì xảy ra trước khi nó dự đoán token kế tiếp?",
-      analogy: "Gợi ý: hãy nhìn lại ba bước predict → append → rerun trên slide."
+      title: "Thử kiểm tra kiến thức nhanh",
+      body: "📌 **1. Trọng tâm [Trang 12]**: Sau khi model dự đoán được 1 token mới, nó thực hiện nối token đó vào chuỗi cũ (Append) rồi chạy lại toàn bộ ngữ cảnh mới (Rerun).\n\n💡 **2. Ví dụ thực tế**: Giống như bạn nối thêm 1 toa tàu mới, rồi nhìn lại cả đoàn tàu để quyết định toa tiếp theo.\n\n🎯 **3. Tự kiểm tra**: Nếu chuỗi ngữ cảnh quá dài vượt Context Window, điều gì sẽ xảy ra?",
+      analogy: "Gợi ý: Hãy nhìn lại 3 bước predict → append → rerun trên slide."
     };
   }
+
   if (normalized.includes("ví dụ")) {
     return {
       type: "happy",
-      title: "Ví dụ với câu “Một tách…”",
-      body: "Model chấm xác suất cho nhiều token có thể đứng tiếp theo. Nếu chọn “cà phê”, nó nối token này vào câu thành “Một tách cà phê”, rồi dùng toàn bộ câu mới làm ngữ cảnh cho lần dự đoán tiếp theo.",
-      analogy: "Điểm cần nhớ: model không viết cả câu một lần; nó lặp lại việc chọn từng mảnh nhỏ."
+      title: "Ví dụ thực chiến với câu “Một tách…”",
+      body: "📌 **1. Trọng tâm [Trang 12]**: Model chấm xác suất cho các từ tiếp theo. Nếu chọn “cà phê”, nó nối từ này thành “Một tách cà phê” rồi lặp lại dự đoán.\n\n💡 **2. Ví dụ thực tế**: Giống như trò chơi nối chữ, bạn không viết cả câu cùng lúc mà nối từng từ dựa trên bối cảnh các từ trước.\n\n🎯 **3. Tự kiểm tra**: Tại sao model lại chọn từ có xác suất cao nhất thay vì ngẫu nhiên?",
+      analogy: "Điểm cốt lõi: Model lặp lại việc chọn từng token mảnh nhỏ."
     };
   }
+
+  const excerptText = selectedExcerpt ? `“${compactText(selectedExcerpt, 120)}”` : `nội dung Trang ${currentPage}`;
   return {
     type: "happy",
-    title: "Hiểu đơn giản trong 20 giây",
-    body: "LLM viết từng token một. Mỗi lần chọn xong một token, nó gắn token đó vào phần đã có rồi đọc lại ngữ cảnh mới để đoán token kế tiếp. Chu trình này lặp đến khi câu trả lời hoàn tất.",
-    analogy: "Giống như nối một đoàn tàu: thêm một toa, nhìn lại cả đoàn hiện tại, rồi mới quyết định toa tiếp theo."
+    title: `Giải thích sư phạm về Trang ${currentPage}`,
+    body: `📌 **1. Trọng tâm [Trang ${currentPage}]**: Dựa theo slide bài học **[Trang ${currentPage} - ${decks[activeDeckKey].label}]**, kiến thức cốt lõi là ${excerptText}.\n\n💡 **2. Bối cảnh thực tế**: Nội dung này cung cấp nguyên lý nền tảng giúp bạn hiểu cách hệ thống AI vận hành mà không bị suy đoán sai lệch.\n\n🎯 **3. Tự kiểm tra**: Bạn có thể chỉ ra 1 điểm quan trọng nhất của trang này đối với dự án của mình không?`,
+    analogy: `*(Nguồn trích dẫn chuẩn xác từ Slide Trang ${currentPage})*`
   };
 }
 
@@ -257,33 +264,55 @@ async function callRealLLMAPI(questionText) {
   if (!apiKey) return null;
 
   const deck = decks[activeDeckKey];
-  const systemPrompt = `Bạn là VLearn Focus Tutor.
-Nhiệm vụ: Trả lời câu hỏi của học viên bám sát chính xác tài liệu Slide [${deck.label} - Trang ${currentPage}]: "${selectedExcerpt}".
-BẮT BUỘC: Trích dẫn [Trang ${currentPage}]. Nếu không có trong slide, từ chối rõ ràng và đề nghị chuyển TA.`;
+  const systemPrompt = `Bạn là VLearn Focus Tutor - Trợ lý giảng dạy xuất sắc của Khóa Học AI Thực Chiến.
+Nhiệm vụ: Giải thích câu hỏi của học viên bám sát chính xác tài liệu Slide [${deck.label} - Trang ${currentPage}]: "${selectedExcerpt}".
 
-  try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\n[HỌC VIÊN HỎI]: ${questionText}` }] }]
-      })
-    });
-    const data = await res.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (reply) {
-      return {
-        type: "happy",
-        title: `Giải thích từ Gemini API (Live AI · Trang ${currentPage})`,
-        body: reply,
-        analogy: "⚡ Lời gọi AI thật trực tiếp từ Gemini 1.5 Flash API cho CP3."
-      };
+BẮT BUỘC TRẢ LỜI THEO CẤU TRÚC SƯ PHẠM 3 PHẦN THÔNG MINH:
+1. 📌 TÓM TẮT TRỌNG TÂM: Giải thích súc tích, đính kèm trích dẫn [Trang ${currentPage}] ngay sau ý chính.
+2. 💡 ẨN DỤ / VÍ DỤ THỰC TẾ: Đưa ra 1 ví dụ đời sống hoặc ẩn dụ thực chiến trong ngành AI thật dễ nhớ.
+3. 🎯 CÂU HỎI TỰ KIỂM TRA: Đặt 1 câu hỏi trắc nghiệm/ngắn để học viên tự kiểm tra mức hiểu.
+
+NGUYÊN TẮC BẢO VỆ (STRICT GROUNDING):
+- Tuyệt đối không bịa đặt kiến thức ngoài slide. 
+- Nếu câu hỏi không có trong bài giảng, bạn PHẢI từ chối rõ ràng: "Nội dung slide hiện tại không đề cập đến thông tin này." và hướng dẫn học viên chuyển TA.`;
+
+  const modelsToTry = ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-pro"];
+  
+  for (const modelName of modelsToTry) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\n[HỌC VIÊN HỎI]: ${questionText}` }] }]
+        })
+      });
+      const data = await res.json();
+      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (reply) {
+        return {
+          type: "happy",
+          title: `Giải Thích Sư Phạm (Live Gemini AI · Trang ${currentPage})`,
+          body: reply,
+          analogy: `⚡ Phản hồi thông minh trực tiếp từ Gemini API (${modelName})`
+        };
+      }
+    } catch (err) {
+      console.warn(`Lỗi gọi Gemini API model ${modelName}:`, err);
     }
-  } catch (err) {
-    console.warn("Lỗi gọi Gemini API, chuyển sang mock:", err);
   }
   return null;
+}
+
+function formatMarkdownHTML(text) {
+  if (!text) return "";
+  let html = text;
+  html = html.replace(/`/g, '');
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  html = html.replace(/\n/g, '<br>');
+  return html;
 }
 
 function addTutorAnswer(text, customAnswer = null) {
@@ -302,9 +331,9 @@ function addTutorAnswer(text, customAnswer = null) {
       <span>FOCUS TUTOR · ${deck.label.toUpperCase()} · TRANG ${currentPage}</span>
       <span class="confidence">${status}</span>
     </div>
-    <h3>${answer.title}</h3>
-    <p>${answer.body.replace(/\n/g, '<br>')}</p>
-    <p class="analogy">${answer.analogy}</p>
+    <h3>${formatMarkdownHTML(answer.title)}</h3>
+    <div class="tutor-body">${formatMarkdownHTML(answer.body)}</div>
+    <div class="analogy">${formatMarkdownHTML(answer.analogy)}</div>
     ${isHappy ? `<button class="citation-button" type="button">
       <span>↗ Kiểm tra ${hasTranscript ? "2 căn cứ" : "căn cứ"}</span><span>Trang ${currentPage}${hasTranscript ? " · T04-047" : ""}</span>
     </button>` : ""}
@@ -329,10 +358,29 @@ function addTutorAnswer(text, customAnswer = null) {
   messages.appendChild(node);
 }
 
+function saveToHistory(questionText) {
+  try {
+    const raw = localStorage.getItem("vlearn_chat_history");
+    const list = raw ? JSON.parse(raw) : [];
+    list.unshift({
+      id: Date.now(),
+      deck: activeDeckKey,
+      page: currentPage,
+      question: questionText,
+      excerpt: compactText(selectedExcerpt, 80),
+      time: new Date().toLocaleTimeString("vi-VN", { hour: '2-digit', minute: '2-digit' })
+    });
+    localStorage.setItem("vlearn_chat_history", JSON.stringify(list.slice(0, 50)));
+  } catch (e) {
+    console.warn("Could not save chat history:", e);
+  }
+}
+
 async function submitQuestion(text) {
   if (!hasContext || !text.trim()) return;
   welcome?.remove();
   addUserMessage(text.trim());
+  saveToHistory(text.trim());
   question.value = "";
   const typing = addTyping();
   scrollMessages();
@@ -378,7 +426,7 @@ function updateEngineBadge() {
   const apiKey = localStorage.getItem("vlearn_api_key");
   if (badgeText) {
     if (apiKey) {
-      badgeText.textContent = "Gemini 1.5 Flash (Live API)";
+      badgeText.textContent = "Gemini API (Live AI Active)";
       badgeText.parentElement.style.background = "#dcfce7";
       badgeText.parentElement.style.color = "#15803d";
       badgeText.parentElement.style.borderColor = "#86efac";
@@ -471,7 +519,7 @@ document.addEventListener("mouseup", (e) => {
 
       if (popover) {
         popover.style.left = `${rect.left + rect.width / 2}px`;
-        popover.style.top = `${rect.top + window.scrollY}px`;
+        popover.style.top = `${rect.top}px`;
         popover.hidden = false;
       }
     } catch (err) {
@@ -487,7 +535,7 @@ btnAskAI?.addEventListener("click", () => {
   selectedExcerpt = currentSelectedText;
   setContext(true);
   if (popover) popover.hidden = true;
-  question.placeholder = `Hỏi về từ/đoạn "${compactText(currentSelectedText, 30)}"...`;
+  question.value = `Giải thích cho tôi nghĩa của từ "${compactText(currentSelectedText, 40)}"`;
   question.focus();
 });
 
@@ -496,7 +544,7 @@ btnConfused?.addEventListener("click", () => {
   selectedExcerpt = currentSelectedText;
   setContext(true);
   if (popover) popover.hidden = true;
-  submitQuestion(`Tôi đang cảm thấy bối rối về thuật ngữ/đoạn "${currentSelectedText}", hãy giải thích ngắn gọn bằng ví dụ nhé!`);
+  submitQuestion(`Giải thích cho tôi nghĩa của từ "${currentSelectedText}"`);
 });
 
 btnNote?.addEventListener("click", () => {
@@ -504,6 +552,68 @@ btnNote?.addEventListener("click", () => {
   alert(`📝 Đã lưu ghi chú cho đoạn: "${compactText(currentSelectedText, 50)}"`);
   if (popover) popover.hidden = true;
 });
+
+// CHAT HISTORY DIALOG HANDLER
+const historyBtn = document.querySelector("#historyButton");
+const historyModal = document.querySelector("#historyDialog");
+const closeHistoryModalBtn = document.querySelector("#closeHistoryDialog");
+const closeHistoryBtn = document.querySelector("#closeHistoryBtn");
+const clearHistoryBtn = document.querySelector("#clearHistoryBtn");
+const historyListContainer = document.querySelector("#historyListContainer");
+
+function renderHistoryModal() {
+  try {
+    const raw = localStorage.getItem("vlearn_chat_history");
+    const list = raw ? JSON.parse(raw) : [];
+    if (!list || list.length === 0) {
+      historyListContainer.innerHTML = `<p style="text-align:center; color:#64748b; padding:20px 0;">Chưa có lịch sử câu hỏi nào. Hãy thử đặt một câu hỏi trên slide!</p>`;
+      return;
+    }
+    historyListContainer.innerHTML = list.map((item) => `
+      <div class="history-item" data-page="${item.page}" data-deck="${item.deck}">
+        <div class="history-meta">
+          <span>${item.deck.toUpperCase()} · TRANG ${item.page}</span>
+          <span>${item.time}</span>
+        </div>
+        <p class="history-q">💬 ${item.question}</p>
+        <p class="history-excerpt">“${item.excerpt}”</p>
+      </div>
+    `).join("");
+
+    historyListContainer.querySelectorAll(".history-item").forEach((el) => {
+      el.addEventListener("click", () => {
+        const page = Number(el.dataset.page);
+        const deckKey = el.dataset.deck;
+        if (deckKey !== activeDeckKey) {
+          loadDeck(deckKey, page);
+        } else {
+          renderPage(page);
+        }
+        historyModal.close();
+      });
+    });
+  } catch (e) {
+    console.warn("Could not render history:", e);
+  }
+}
+
+if (historyBtn && historyModal) {
+  historyBtn.addEventListener("click", () => {
+    renderHistoryModal();
+    historyModal.showModal();
+  });
+  closeHistoryModalBtn?.addEventListener("click", () => historyModal.close());
+  closeHistoryBtn?.addEventListener("click", () => historyModal.close());
+  clearHistoryBtn?.addEventListener("click", () => {
+    if (confirm("Bạn có chắc chắn muốn xóa toàn bộ lịch sử câu hỏi không?")) {
+      localStorage.removeItem("vlearn_chat_history");
+      renderHistoryModal();
+    }
+  });
+  historyModal.addEventListener("click", (e) => {
+    if (e.target === historyModal) historyModal.close();
+  });
+}
 
 loadDeck("day1", 12).catch((error) => {
   slideLoading.hidden = false;

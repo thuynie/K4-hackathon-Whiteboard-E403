@@ -128,9 +128,13 @@ button { cursor: pointer; }
 .message.tutor-answer { padding: 16px; border: 1px solid var(--line); border-radius: 4px 16px 16px; background: var(--white); box-shadow: 0 7px 24px rgba(34, 47, 40, .06); }
 .answer-meta { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 12px; color: var(--muted); font-size: 10px; font-weight: 800; }
 .confidence { color: var(--green-2); }
-.message h3 { margin: 0 0 9px; font: 700 18px Georgia, serif; }
+.message h3 { margin: 0 0 9px; font: 700 17px Georgia, serif; color: var(--ink); }
 .message p { margin: 0 0 10px; font-size: 13px; line-height: 1.6; }
-.analogy { padding: 11px; border-left: 3px solid var(--green-2); background: #f3f6f1; border-radius: 0 8px 8px 0; }
+.tutor-body { font-size: 13px; line-height: 1.65; color: #1e293b; margin-bottom: 12px; }
+.tutor-body strong { color: #0f172a; font-weight: 750; }
+.tutor-body em { color: #0369a1; font-style: normal; font-weight: 600; }
+.analogy { padding: 11px; border-left: 3px solid var(--green-2); background: #f3f6f1; border-radius: 0 8px 8px 0; font-size: 12px; line-height: 1.5; color: #334155; margin-bottom: 12px; }
+.analogy strong { color: #0f172a; font-weight: 750; }
 .citation-button { width: 100%; display: flex; justify-content: space-between; padding: 10px 11px; border: 1px solid #d4ddd5; border-radius: 99px; color: var(--green); background: #f8fbf7; font-size: 11px; font-weight: 800; transition: .15s ease; }
 .citation-button:hover { background: #eaf4eb; border-color: #a4caa8; }
 
@@ -228,3 +232,21 @@ dialog h2 { margin: 6px 0 16px; font-size: 20px; font-weight: 800; }
   border-color: #71717a;
   color: #ffffff;
 }
+
+/* HISTORY LIST STYLES */
+.history-list { display: flex; flex-direction: column; gap: 8px; padding: 6px; }
+.history-item {
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.history-item:hover {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+}
+.history-meta { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 10px; font-weight: 800; color: #0284c7; }
+.history-q { margin: 0 0 4px; font-size: 13px; font-weight: 700; color: #0f172a; }
+.history-excerpt { font-size: 11px; color: #64748b; margin: 0; font-style: italic; }
