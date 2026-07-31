@@ -251,9 +251,16 @@ button { cursor: pointer; }
 .message p { margin: 0 0 12px; font-size: 14px; line-height: 1.72; color: var(--t-text); }
 .message p:last-of-type { margin-bottom: 0; }
 
+/* Thân câu trả lời đã qua formatMarkdownHTML() — **đậm** và *nghiêng* */
+.tutor-body { font-size: 14px; line-height: 1.72; color: var(--t-text); }
+.tutor-body strong { color: #fff; font-weight: 700; }
+.tutor-body em { color: var(--lime); font-style: normal; font-weight: 600; }
+
 /* Ghi chú kỹ thuật / ẩn dụ: là phụ chú, phải mờ hơn nội dung chính */
 .analogy { margin-top: 14px !important; padding: 10px 13px; border-left: 2px solid var(--g-600); background: rgba(255,255,255,.03); border-radius: 0 7px 7px 0; color: var(--t-muted) !important; font-size: 12px !important; line-height: 1.6 !important; }
 .analogy code { color: var(--lime); font-size: 11px; }
+.analogy strong { color: var(--t-text); font-weight: 700; }
+.analogy em { color: var(--t-muted); font-style: italic; }
 
 /* Nút kiểm tra căn cứ: hành động chính sau khi đọc xong -> nổi hơn feedback */
 .citation-button { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 16px; padding: 11px 14px; border: 1px solid var(--t-border); border-radius: 10px; color: var(--t-text); background: var(--t-surface); font-size: 12px; font-weight: 700; text-align: left; transition: .15s ease; }
@@ -384,3 +391,21 @@ dialog h2 { margin: 6px 0 16px; font-size: 20px; font-weight: 800; }
   border-color: var(--g-400);
   color: #fff;
 }
+
+/* HISTORY LIST STYLES */
+.history-list { display: flex; flex-direction: column; gap: 8px; padding: 6px; }
+.history-item {
+  padding: 12px;
+  border: 1px solid var(--g-100);
+  border-radius: 10px;
+  background: var(--g-50);
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.history-item:hover {
+  background: var(--g-100);
+  border-color: var(--g-400);
+}
+.history-meta { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 10px; font-weight: 800; color: var(--g-600); }
+.history-q { margin: 0 0 4px; font-size: 13px; font-weight: 700; color: var(--ink); }
+.history-excerpt { font-size: 11px; color: var(--muted); margin: 0; font-style: italic; }
